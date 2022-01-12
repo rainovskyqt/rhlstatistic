@@ -1,0 +1,1 @@
+web: gunicorn rhlstatistic.wsgi --log-file -
