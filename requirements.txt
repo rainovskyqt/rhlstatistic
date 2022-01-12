@@ -8,3 +8,6 @@ markdown
 django-filter
 gunicorn
 whitenoise
+django_extensions
+graphviz
+dotplus
