@@ -2,16 +2,11 @@ from django.db import models
 
 
 # Create your models here.
-class Division(models.Model):
-    name = models.CharField(max_length=10)
-
-    def __str__(self):
-        return self.name
+from django.utils.formats import date_format
 
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
-    division = models.ForeignKey(Division, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -28,31 +23,15 @@ class Player(models.Model):
     last_name = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     position = models.ForeignKey(PlayerPosition, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-
-class PlayerTeam(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
-    year = models.CharField(max_length=4)
     number = models.CharField(max_length=2)
 
     def __str__(self):
-        return self.name
-
-
-class TournamentType(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
+        return self.last_name + ' ' + self.name
 
 
 class Tournament(models.Model):
     name = models.CharField(max_length=100)
-    type = models.ForeignKey(TournamentType, on_delete=models.CASCADE)
     year = models.CharField(max_length=100)
 
     def __str__(self):
@@ -61,36 +40,14 @@ class Tournament(models.Model):
 
 class Game(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    date_time = models.DateTimeField
+    date_time = models.DateTimeField()
     team_home = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='home')
     team_guest = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='guest')
+    home_score = models.IntegerField(default=0)
+    guest_score = models.IntegerField(default=0)
+    ended = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return date_format(self.date_time) + ' ' + self.tournament.name + ' ' + self.team_home.name + ' - ' + \
+               self.team_guest.name  \
 
-
-class GameResult(models.Model):
-    home_score = models.IntegerField()
-    guest_score = models.IntegerField()
-    shots_on_goal = models.IntegerField()
-    blocked_shots = models.IntegerField()
-
-    def __str__(self):
-        return self.name
-
-
-class EventType(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
-class GameEvent(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    time = models.IntegerField()
-    type = models.ForeignKey(EventType, on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name

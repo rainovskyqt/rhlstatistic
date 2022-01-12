@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'rhlstatistic.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'rhl_db',
+        'NAME': 'rhlstatistic_db',
         'USER': 'postgres',
         'PASSWORD' : os.environ['DATABASE_PASSWORD'] if 'DATABASE_PASSWORD' in os.environ else '',
         'HOST': 'localhost',
