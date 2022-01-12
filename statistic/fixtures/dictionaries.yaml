@@ -46,9 +46,9 @@
 - model: statistic.eventType
   pk: 1
   fields:
-    name: Гол
+    name: Удаление
 
 - model: statistic.eventType
-  pk: 1
+  pk: 2
   fields:
-    name: Удаление
+    name: Гол
