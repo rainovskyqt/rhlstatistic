@@ -1,0 +1,54 @@
+- model: statistic.division
+  pk: 1
+  fields:
+    name: Супер лига
+
+- model: statistic.division
+  pk: 2
+  fields:
+    name: Первый
+
+- model: statistic.division
+  pk: 3
+  fields:
+    name: Второй
+
+- model: statistic.division
+  pk: 4
+  fields:
+    name: Третий
+
+- model: statistic.playerPosition
+  pk: 1
+  fields:
+    name: Вратарь
+
+- model: statistic.playerPosition
+  pk: 2
+  fields:
+    name: Защитник
+
+- model: statistic.playerPosition
+  pk: 3
+  fields:
+    name: Нападающий
+
+- model: statistic.tournamentType
+  pk: 1
+  fields:
+    name: Регулярный турнир
+
+- model: statistic.tournamentType
+  pk: 2
+  fields:
+    name: Кубок
+
+- model: statistic.eventType
+  pk: 1
+  fields:
+    name: Гол
+
+- model: statistic.eventType
+  pk: 1
+  fields:
+    name: Удаление

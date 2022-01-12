@@ -1,1 +1,10 @@
 psycopg2
+pyyaml
+django
+dj-database-url
+django-heroku
+djangorestframework
+markdown
+django-filter
+gunicorn
+whitenoise

@@ -62,18 +62,18 @@ class Tournament(models.Model):
 class Game(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     date_time = models.DateTimeField
-    team_home = models.ForeignKey(Team, on_delete=models.CASCADE)
-    team_guest = models.ForeignKey(Team, on_delete=models.CASCADE)
+    team_home = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='home')
+    team_guest = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='guest')
 
     def __str__(self):
         return self.name
 
 
-class GameResults(models.Model):
-    home_score = models.IntegerField(max_length=3)
-    guest_score = models.IntegerField(max_length=3)
-    shots_on_goal = models.IntegerField(max_length=3)
-    blocked_shots = models.IntegerField(max_length=3)
+class GameResult(models.Model):
+    home_score = models.IntegerField()
+    guest_score = models.IntegerField()
+    shots_on_goal = models.IntegerField()
+    blocked_shots = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -88,7 +88,7 @@ class EventType(models.Model):
 
 class GameEvent(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    time = models.IntegerField(max_length=3)
+    time = models.IntegerField()
     type = models.ForeignKey(EventType, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
 
