@@ -2,6 +2,8 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+
 from .models import Team, PlayerPosition, Player, Tournament, Game
 from . import serializers
 
@@ -19,15 +21,15 @@ def team_list(request):
     if request.method == 'GET':
         queryset = Team.objects.all().order_by('name')
         team_serializer = serializers.TeamSerializer(queryset, many=True)
-        return JsonResponse(team_serializer.data, safe=False)
+        return Response(team_serializer.data)
 
     elif request.method == 'POST':
         team_data = JSONParser().parse(request)
         team_serializer = serializers.TeamSerializer(data=team_data)
         if team_serializer.is_valid():
             team_serializer.save()
-            return JsonResponse(team_serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(team_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(team_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(team_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['PUT', 'DELETE'])
@@ -35,19 +37,19 @@ def team_detail(request, pk):
     try:
         team = Team.objects.get(pk=pk)
     except Team.DoesNotExist:
-        return JsonResponse({'message': 'The team does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': 'The team does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'PUT':
-        team_data = JSONParser().parse(request)
-        team_serializer = serializers.TeamSerializer(team, data=team_data)
+        team_serializer = serializers.TeamSerializer(team, data=request.data)
         if team_serializer.is_valid():
             team_serializer.save()
-            return JsonResponse(team_serializer.data)
-        return JsonResponse(team_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(team_serializer.data, status=status.HTTP_204_NO_CONTENT)
+        return Response(team_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     elif request.method == 'DELETE':
         team.delete()
-        return JsonResponse({'message': 'Team was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'Team was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET', 'POST'])
