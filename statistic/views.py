@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
@@ -6,6 +7,10 @@ from rest_framework.response import Response
 
 from .models import Team, PlayerPosition, Player, Tournament, Game
 from . import serializers
+
+
+def index(request):
+    return render(request, 'index.html')
 
 
 @api_view(['GET'])
@@ -17,7 +22,6 @@ def player_position_list(request):
 
 @api_view(['GET', 'POST'])
 def team_list(request):
-
     if request.method == 'GET':
         queryset = Team.objects.all().order_by('name')
         team_serializer = serializers.TeamSerializer(queryset, many=True)
@@ -46,7 +50,6 @@ def team_detail(request, pk):
             return Response(team_serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(team_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     elif request.method == 'DELETE':
         team.delete()
         return Response({'message': 'Team was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
@@ -54,7 +57,6 @@ def team_detail(request, pk):
 
 @api_view(['GET', 'POST'])
 def players_list(request):
-
     if request.method == 'GET':
         queryset = Player.objects.all().order_by('last_name')
         player_serializer = serializers.PlayerSerializer(queryset, many=True)
@@ -71,7 +73,6 @@ def players_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def players_detail(request, pk):
-
     try:
         player = Player.objects.get(pk=pk)
     except Player.DoesNotExist:
@@ -96,7 +97,6 @@ def players_detail(request, pk):
 
 @api_view(['GET', 'POST'])
 def tournament_list(request):
-
     if request.method == 'GET':
         queryset = Tournament.objects.all().order_by('id')
         tournament_serializer = serializers.TournamentSerializer(queryset, many=True)
@@ -133,9 +133,8 @@ def tournament_detail(request, pk):
 
 @api_view(['GET', 'POST'])
 def game_list(request):
-
     if request.method == 'GET':
-        queryset = Game.objects.all().order_by('id')
+        queryset = Game.objects.all().order_by('-date_time')
         game_serializer = serializers.GameSerializer(queryset, many=True)
         return JsonResponse(game_serializer.data, safe=False)
 
